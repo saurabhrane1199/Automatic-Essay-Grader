@@ -9,7 +9,7 @@ import keras.backend as K
 from keras.optimizers import SGD, Adam
 import gensim
 import pickle
-git 
+
 nltk.download('punkt')
 nltk.download('stopwords')
 
@@ -93,6 +93,6 @@ def pred_score(essay_set, text):
     return final_score
 
 def grade_score(essay_set,scoring_essay):
-    grade = pred_score('1', scoring_essay)
+    grade = pred_score(essay_set, scoring_essay)
     return grade
 
