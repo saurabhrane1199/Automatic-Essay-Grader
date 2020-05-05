@@ -1,16 +1,23 @@
 import os
 import pandas as pd
-
-X = pd.read_csv(('training_set_rel3.tsv'), sep='\t', encoding='ISO-8859-1')
-y = X['domain1_score']
-X = X.dropna(axis=1)
-X = X.drop(columns=['rater1_domain1', 'rater2_domain1'])
-
 import numpy as np
 import nltk
 import re
 from nltk.corpus import stopwords
 from gensim.models import Word2Vec
+from keras.layers import Embedding, LSTM, Dense, Dropout, Lambda, Flatten
+from keras.models import Sequential, load_model, model_from_config
+import keras.backend as K
+from keras.optimizers import SGD, Adam
+
+# X = pd.read_csv(('training_set_rel3.tsv'), sep='\t', encoding='ISO-8859-1')
+# y = X['domain1_score']
+# X = X.dropna(axis=1)
+# X = X.drop(columns=['rater1_domain1', 'rater2_domain1'])
+
+nltk.download('punkt')
+nltk.download('stopwords')
+
 
 def essay_words(essay, rm_stopwords):
     """Remove the tagged labels and word tokenize the sentence."""
@@ -52,10 +59,7 @@ def Avg_feat_vect(essays, model, num_feat):
         c = c + 1
     return essay_feat
 
-from keras.layers import Embedding, LSTM, Dense, Dropout, Lambda, Flatten
-from keras.models import Sequential, load_model, model_from_config
-import keras.backend as K
-from keras.optimizers import SGD, Adam
+
 
 def build_model():
     """Define the model."""
@@ -70,25 +74,23 @@ def build_model():
 
     return model
 
-nltk.download('punkt')
-nltk.download('stopwords')
 
-X_set_1 = X[X['essay_set'] == 1]
-X_set_2 = X[X['essay_set'] == 2]
-X_set_3 = X[X['essay_set'] == 3]
-X_set_4 = X[X['essay_set'] == 4]
-X_set_5 = X[X['essay_set'] == 5]
-X_set_6 = X[X['essay_set'] == 6]
-X_set_7 = X[X['essay_set'] == 7]
-#X_set_8 = X[X['essay_set'] == 8]
-y_set_1 = y[X['essay_set'] == 1]
-y_set_2 = y[X['essay_set'] == 2]
-y_set_3 = y[X['essay_set'] == 3]
-y_set_4 = y[X['essay_set'] == 4]
-y_set_5 = y[X['essay_set'] == 5]
-y_set_6 = y[X['essay_set'] == 6]
-y_set_7 = y[X['essay_set'] == 7]
-#y_set_8 = y[X['essay_set'] == 8]
+# X_set_1 = X[X['essay_set'] == 1]
+# X_set_2 = X[X['essay_set'] == 2]
+# X_set_3 = X[X['essay_set'] == 3]
+# X_set_4 = X[X['essay_set'] == 4]
+# X_set_5 = X[X['essay_set'] == 5]
+# X_set_6 = X[X['essay_set'] == 6]
+# X_set_7 = X[X['essay_set'] == 7]
+# #X_set_8 = X[X['essay_set'] == 8]
+# y_set_1 = y[X['essay_set'] == 1]
+# y_set_2 = y[X['essay_set'] == 2]
+# y_set_3 = y[X['essay_set'] == 3]
+# y_set_4 = y[X['essay_set'] == 4]
+# y_set_5 = y[X['essay_set'] == 5]
+# y_set_6 = y[X['essay_set'] == 6]
+# y_set_7 = y[X['essay_set'] == 7]
+# #y_set_8 = y[X['essay_set'] == 8]
 
 from sklearn.model_selection import train_test_split
 #from sklearn.linear_model import LinearRegression
@@ -160,7 +162,7 @@ y_pred_7, y_test_7, model_7 = fit_model(X_set_7, y_set_7,'7')
 #y_pred_8, y_test_8, model_8 = fit_model(X_set_8, y_set_8,'8')'''
 
 
-def driver(dataframe):
+def driver(add_new_topic):
     y_new_essay = add_new_topic['domain1_score']
     add_new_topic = add_new_topic.dropna(axis=1)
     add_new_topic = add_new_topic.drop(columns=['rater1_domain1', 'rater2_domain1'])

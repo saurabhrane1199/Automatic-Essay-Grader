@@ -13,6 +13,11 @@
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </head>
 
+{% if sucesss %}
+<script>
+    alert('The system has been trained successfully for the given array')
+</script>
+{% endif %}
 <body>
     <p class="page-title">Automatic Essay Corrector</p>
     <div class="container wrapper">
